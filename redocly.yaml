@@ -1,0 +1,66 @@
+apis:
+  consumer@v1:
+    root: schema-consumer-v1.yaml
+  merchant@v1:
+    root: schema-merchant-v1.yaml
+
+organization: belle-financial
+
+meta:
+  title: Belle API Docs
+  description: >
+    Belle is a embedded lending platform that enables sponsors to offer
+    financing solutions to their merchants and consumers. This documentation
+    covers the Sponsor API for managing merchants and issuing consumer loans.
+  favicon: https://example.com/favicon.ico
+
+navbar:
+  items:
+    - label: Home
+      page: /
+    - label: Consumer API
+      page: /consumer/
+    - label: Merchant API
+      page: /merchant/
+    - label: Guides
+      page: /guides/
+
+footer:
+  copyrightText: "Copyright 2026 Belle Financial. All rights reserved."
+  columns:
+    - header: Resources
+      items:
+        - label: API Reference
+          href: /consumer/
+        - label: Guides
+          href: /guides/
+    - header: Company
+      items:
+        - label: About
+          href: https://example.com/about
+        - label: Contact
+          href: https://example.com/contact
+
+seo:
+  title: Belle API Documentation
+  description: >
+    Developer documentation for the Belle Sponsor API — manage merchants,
+    issue consumer loans, and integrate lending into your platform.
+  keywords:
+    - belle
+    - api
+    - embedded lending
+    - consumer loans
+    - merchant financing
+
+theme:
+  typography:
+    fontSize: 15px
+    fontFamily: Inter, sans-serif
+  colors:
+    primary:
+      main: '#1a73e8'
+    text:
+      primary: '#1f2937'
+    background:
+      primary: '#ffffff'
