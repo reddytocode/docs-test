@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Belle API
-  version: 1.0.0 (sponsor_merchant_v1)
+  version: 1.0.0
 paths:
   /api/v1/sponsor/merchants/:
     get:
@@ -71,9 +71,10 @@ paths:
           description: ''
     post:
       operationId: Offer Code Create
-      description: |-
-        Authentication information, user, and password are required for this endpoint.
-        Sponsor ID will be determined by the authentication information used.
+      description: 'Authentication information, user, and password are required for
+        this endpoint.
+
+        Sponsor ID will be determined by the authentication information used.'
       parameters:
       - in: path
         name: id
@@ -141,14 +142,21 @@ paths:
           description: ''
     patch:
       operationId: Offer Code Update
-      description: |-
-        Soft delete functionality for offer codes.
+      description: 'Soft delete functionality for offer codes.
+
         This endpoint implements soft deletion using PATCH.
+
         Behavior:
+
         - Updates the `is_deleted` field to mark offer codes as deleted
-        - Returns a custom success message when `is_deleted` changes from False to True
-        - Prevents restoration by rejecting attempts to change `is_deleted` from True to False
-        - Returns HTTP 400 Bad Request for invalid deletion state transitions
+
+        - Returns a custom success message when `is_deleted` changes from False to
+        True
+
+        - Prevents restoration by rejecting attempts to change `is_deleted` from True
+        to False
+
+        - Returns HTTP 400 Bad Request for invalid deletion state transitions'
       parameters:
       - in: path
         name: id
@@ -235,25 +243,43 @@ paths:
   /api/v1/sponsor/merchants/onboarding/:
     post:
       operationId: Merchant Pre Onboarding
-      description: |-
-        The merchant’s first step is to request an invitation to apply.
-        The merchant provides the sponsor with required business and contact information,
-        which the sponsor then submits to Momnt for storage and initial account creation.
-        The response from this endpoint allows the sponsor to store Momnt’s merchant-specific identifiers for future use.
+      description: 'The merchant’s first step is to request an invitation to apply.
 
-        After a successful request, Momnt sends the new merchant an email invitation to complete their application
-        using Momnt’s merchant onboarding user interface (UI). Please ensure the address submitted is a valid,
-        mailable address. Momnt uses Smarty Streets (smarty.com) as the address verification provider.
+        The merchant provides the sponsor with required business and contact information,
+
+        which the sponsor then submits to Momnt for storage and initial account creation.
+
+        The response from this endpoint allows the sponsor to store Momnt’s merchant-specific
+        identifiers for future use.
+
+
+        After a successful request, Momnt sends the new merchant an email invitation
+        to complete their application
+
+        using Momnt’s merchant onboarding user interface (UI). Please ensure the address
+        submitted is a valid,
+
+        mailable address. Momnt uses Smarty Streets (smarty.com) as the address verification
+        provider.
+
 
         **Notes for Testing:**
-        - After a successful POST, a merchant account will be created along with the first merchant admin user.
+
+        - After a successful POST, a merchant account will be created along with the
+        first merchant admin user.
+
         - If you wish to test again, you must change the `users_business_email`, `user_id`,
+
         and `contractor_id` values so they are unique for each request.
 
+
         **Error Responses:**
+
         - 400: `User Already Exists`
+
         - 400: `Merchant Already Exists`
-        - 400: `Merchant User Already Exists`
+
+        - 400: `Merchant User Already Exists`'
       tags:
       - SponsorAPI _ Merchant
       requestBody:
@@ -287,22 +313,40 @@ paths:
         pre_onboarding_callback:
           /path-to-callback/:
             post:
-              description: |-
-                Merchant Pre-Onboarding Callback (POST)
-                For an external partner to create a merchant, a user with admin/owner permissions on
-                that merchant must complete Momnt's onboarding workflow. Once the workflow is successfully completed,
+              description: 'Merchant Pre-Onboarding Callback (POST)
+
+                For an external partner to create a merchant, a user with admin/owner
+                permissions on
+
+                that merchant must complete Momnt''s onboarding workflow. Once the
+                workflow is successfully completed,
+
                 and the user has accepted the Terms & Conditions,
+
                 Momnt will send a callback and POST the finalized merchant data.
 
+
                 **Requirements**
-                - A successful start-merchant-onboarding POST must occur before any callback will fire.
-                - The merchant user must complete the onboarding UI flow and accept the Terms & Conditions.
+
+                - A successful start-merchant-onboarding POST must occur before any
+                callback will fire.
+
+                - The merchant user must complete the onboarding UI flow and accept
+                the Terms & Conditions.
+
                 - Only after both steps are complete will Momnt issue the callback.
 
+
                 **URL Parameters**
-                - URL parameters should follow standard key/value format and are fully optional.
-                - Authentication for the callback uses Basic Auth, requiring a username and password
-                that the partner provides to Momnt and that Momnt stores securely in our system.
+
+                - URL parameters should follow standard key/value format and are fully
+                optional.
+
+                - Authentication for the callback uses Basic Auth, requiring a username
+                and password
+
+                that the partner provides to Momnt and that Momnt stores securely
+                in our system.'
               requestBody:
                 content:
                   application/json:
@@ -351,17 +395,27 @@ paths:
   /api/v1/sponsor/merchants/payment-detail/initiate-micro-deposits/{request_user_id}/:
     post:
       operationId: Initiate Micro-Deposits
-      description: |-
-        This endpoint will only be used after an error occurs when verifying the Micro-Deposits.
-        Ie. The merchant exhausts their attempts for verification (More than three wrong attempts),
-        or their Micro-Deposits expire (after 14 days). This endpoint needs to be called when the
+      description: 'This endpoint will only be used after an error occurs when verifying
+        the Micro-Deposits.
+
+        Ie. The merchant exhausts their attempts for verification (More than three
+        wrong attempts),
+
+        or their Micro-Deposits expire (after 14 days). This endpoint needs to be
+        called when the
+
         bank_account_status is VerificationFailed.
 
+
         **Requirements:**
+
         - Authentication information, user, and password are required for this endpoint.
+
         - Sponsor ID will be determined by the authentication information used.
+
         - The request_user_id should have an admin role on the account.
-        - No fields are required for this POST.
+
+        - No fields are required for this POST.'
       parameters:
       - in: path
         name: request_user_id
@@ -399,14 +453,22 @@ paths:
   /api/v1/sponsor/merchants/payment-detail/verify-micro-deposits/{request_user_id}/:
     post:
       operationId: Verify Micro-Deposits
-      description: |-
-        Micro-deposits are two small deposits (a maximum of $0.99, a minimum of $0.01, and inclusive) that verify
-        the merchant's business bank account. The values accept a float directly or a string representation of the
+      description: 'Micro-deposits are two small deposits (a maximum of $0.99, a minimum
+        of $0.01, and inclusive) that verify
+
+        the merchant''s business bank account. The values accept a float directly
+        or a string representation of the
+
         cents amount. ("0.75" and "0.01")
 
+
         Requirements:
-        Authentication information, user, and password are required for this endpoint. Sponsor ID will be determined
-        by the authentication information used. The request_user_id should have an admin role on the account.
+
+        Authentication information, user, and password are required for this endpoint.
+        Sponsor ID will be determined
+
+        by the authentication information used. The request_user_id should have an
+        admin role on the account.'
       parameters:
       - in: path
         name: request_user_id
@@ -470,18 +532,32 @@ paths:
   /api/v1/sponsor/merchants/rate-sheets/{request_user_id}/:
     get:
       operationId: Merchant Rate Sheet List
-      description: |-
-        A merchant that is approved and active should always have a rate sheet set up with Momnt.
-        If a merchant does not select any products on their rate sheet, consumers who apply via that
-        merchant will not get any offers. The rate sheet allows the merchant to view available loan
-        products and details associated with those products including descriptions, APRs, terms, and
+      description: 'A merchant that is approved and active should always have a rate
+        sheet set up with Momnt.
+
+        If a merchant does not select any products on their rate sheet, consumers
+        who apply via that
+
+        merchant will not get any offers. The rate sheet allows the merchant to view
+        available loan
+
+        products and details associated with those products including descriptions,
+        APRs, terms, and
+
         merchant fees.
+
         This GET endpoint will return the rate sheet for a given merchant.
 
+
         **Requirements:**
-        - request_user_id: There must be a user ID in the Momnt system for this GET request to succeed.
+
+        - request_user_id: There must be a user ID in the Momnt system for this GET
+        request to succeed.
+
         That user must be active and have Admin permission, in this specific merchant/sponsor.
-        This user ID should have been established in previous interactions, such as pre-onboarding or create_user.
+
+        This user ID should have been established in previous interactions, such as
+        pre-onboarding or create_user.'
       parameters:
       - in: query
         name: is_merchant_selected
@@ -507,17 +583,30 @@ paths:
   /api/v1/sponsor/merchants/users/:
     post:
       operationId: Merchant User Creation
-      description: |-
-        For an external partner to create/update a user. Fields provided will be checked against the Momnt database
-        to ensure permissions and accounts exist. Users are created in Merchants; therefore, a merchant must exist.
-        Users are created by Admin users; therefore, one must exist. To that end: A successful merchant onboarding workflow
-        should have been created before this endpoint can't be used effectively.
+      description: 'For an external partner to create/update a user. Fields provided
+        will be checked against the Momnt database
+
+        to ensure permissions and accounts exist. Users are created in Merchants;
+        therefore, a merchant must exist.
+
+        Users are created by Admin users; therefore, one must exist. To that end:
+        A successful merchant onboarding workflow
+
+        should have been created before this endpoint can''t be used effectively.
+
 
         **Requirements:**
-        - request_user_id: There must be a user ID in our system for this POST request to succeed. That user must
-        have permission to create subsequent users, in this specific merchant/sponsor. This user ID should have
-        been established in previous interactions, such as pre-onboarding. Therefore, this field should be in the
-        partner's database as well as Momnt.
+
+        - request_user_id: There must be a user ID in our system for this POST request
+        to succeed. That user must
+
+        have permission to create subsequent users, in this specific merchant/sponsor.
+        This user ID should have
+
+        been established in previous interactions, such as pre-onboarding. Therefore,
+        this field should be in the
+
+        partner''s database as well as Momnt.'
       tags:
       - SponsorAPI _ Merchant
       requestBody:
@@ -549,17 +638,30 @@ paths:
           description: ''
     patch:
       operationId: Merchant User Update
-      description: |-
-        For an external partner to create/update a user. Fields provided will be checked against the Momnt database
-        to ensure permissions and accounts exist. Users are created in Merchants; therefore, a merchant must exist.
-        Users are created by Admin users; therefore, one must exist. To that end: A successful merchant onboarding workflow
-        should have been created before this endpoint can't be used effectively.
+      description: 'For an external partner to create/update a user. Fields provided
+        will be checked against the Momnt database
+
+        to ensure permissions and accounts exist. Users are created in Merchants;
+        therefore, a merchant must exist.
+
+        Users are created by Admin users; therefore, one must exist. To that end:
+        A successful merchant onboarding workflow
+
+        should have been created before this endpoint can''t be used effectively.
+
 
         **Requirements:**
-        - request_user_id: There must be a user ID in our system for this POST request to succeed. That user must
-        have permission to create subsequent users, in this specific merchant/sponsor. This user ID should have
-        been established in previous interactions, such as pre-onboarding. Therefore, this field should be in the
-        partner's database as well as Momnt.
+
+        - request_user_id: There must be a user ID in our system for this POST request
+        to succeed. That user must
+
+        have permission to create subsequent users, in this specific merchant/sponsor.
+        This user ID should have
+
+        been established in previous interactions, such as pre-onboarding. Therefore,
+        this field should be in the
+
+        partner''s database as well as Momnt.'
       tags:
       - SponsorAPI _ Merchant
       requestBody:
@@ -644,6 +746,1021 @@ paths:
               schema:
                 $ref: '#/components/schemas/PartnerMerchantUserBatchCreate400ResponseSchema'
           description: ''
+  /api/v1/sponsor/consumers/application/:
+    post:
+      operationId: sponsor_consumers_application_create
+      description: 'For a merchant/contractor to issue a loan to a consumer.
+
+
+        The partner/sponsor must first send a POST to Momnt to initiate the consumer
+        loan.
+
+
+        - Sends an invite via **SMS** or **Email**
+
+        - Only **ONE** of those fields is required
+
+        - Providing both will result in an error'
+      summary: Consumer Application Invitation
+      tags:
+      - SponsorAPI _ Consumer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerPreOnboarding'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerPreOnboarding'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerPreOnboarding'
+        required: true
+      security:
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerConsumerPreOnboardingResponse'
+          description: ''
+      callbacks:
+        Consumer Application Callback:
+          /path-to-callback/:
+            post:
+              description: '**Consumer Application Callback (POST)**
+
+
+                After the sponsor initiates a consumer loan invitation in the step
+                above, Momnt will send the loan
+
+                invitation via Email or SMS to the consumer.
+
+                The consumer will use the URL sent in the loan invitation to complete
+                the Momnt loan application.
+
+                Once this is complete, the sponsor and merchant will need to know
+                the outcome of that application.
+
+                The consumer''s application decision and other relevant details will
+                be sent to the sponsor_callback_url.
+
+                When a consumer loan is approved or canceled, Momnt will POST information
+                to this fully qualified URL.
+
+                This URL will be called A SECOND TIME when the loan documents are
+                accepted by the consumer (borrower).
+
+
+                **Requirements:**
+
+                Before this callback will fire, a successful POST to send a consumer
+                application must have taken place,
+
+                followed by successful completion of the application in the user interface
+                session.
+
+                Basic Auth is supported by a username/password combination which is
+                pre-shared between Momnt and the
+
+                sponsor.
+
+
+                **Response Structure**:
+
+                - Momnt expects acknowledgment of the POST with HTTP Status codes
+                of 200 or 201 for success. Any other
+
+                status code will result in an error being logged.
+
+                The payload will be logged and used for informational/historical purposes
+                only and may contain anything
+
+                the external partner wishes.'
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/CallbackConsumerApplicationSchema'
+                required: true
+              responses:
+                '200':
+                  description: No response body
+  /api/v1/sponsor/consumers/offers/{offer_uuid}/select/:
+    patch:
+      operationId: Selected Consumer Offer
+      description: '**Overview**
+
+
+        - This API enables external vendors to identify the product offer selected
+        by a consumer
+
+        and returns the necessary information to guide the consumer through completing
+        their
+
+        Momnt application and accepting the loan terms.
+
+
+        - `offer_uuid` is the UUID of the selected offer, as provided in the Soft
+        Pull response.'
+      parameters:
+      - in: path
+        name: offer_uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - SponsorAPI _ Consumer Soft Pull
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPartnerConsumerOfferUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPartnerConsumerOfferUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPartnerConsumerOfferUpdate'
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerConsumerOfferUpdateResponse'
+          description: ''
+      callbacks:
+        Consumer Application Callback:
+          /sponsor_callback_url/:
+            post:
+              description: '**Consumer Application Callback (POST)**
+
+                **Overview**
+
+                After the external vendor initiates a consumer loan soft credit pull
+                and the consumer selects a loan offer
+
+                within the vendor''s application, they are routed to the Momnt consumer
+                application workflow to review and
+
+                accept the loan terms. Once the consumer confirms their offer and
+                accepts the terms, Momnt will send a
+
+                callback to the sponsor_callback_url with details about the consumer''s
+                application.
+
+                **Requirements**
+
+                - A successful POST request must have been made to begin the consumer
+                application soft pull of credit.
+
+                - The consumer must complete the loan application within the user
+                interface.
+
+                - Basic authentication (username/password) is supported and pre-shared
+                between Momnt and the sponsor.'
+              responses:
+                '200':
+                  description: No response body
+  /api/v1/sponsor/consumers/soft-pull/:
+    post:
+      operationId: Consumer Soft Pull Request
+      description: '**Overview**
+
+
+        This API allows external vendors to initiate a soft credit pull for consumers
+        by
+
+        providing the required data elements. The API response will return either:
+
+
+        - Offers with loan product(s) details, or
+
+        - No Offers, which may trigger an Adverse Action Notice (AAN) email to the
+        consumer.
+
+
+        **Requirements**
+
+
+        - Authentication (username and password) is required.
+
+        - Sponsor ID is determined by the authentication credentials.
+
+        - Callback URLs must use Basic Auth authentication.
+
+        Clients must implement Basic Auth for callback URLs and provide credentials
+        to Momnt.
+
+        - API requests will only be processed if the merchant''s status is Active.'
+      tags:
+      - SponsorAPI _ Consumer Soft Pull
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerSoftPull'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerSoftPull'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerSoftPull'
+        required: true
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerConsumerSoftPullResponse'
+          description: ''
+  /api/v1/sponsor/merchants/{request_user_id}/all-transactions/:
+    get:
+      operationId: Consumer - All Transaction Activity
+      description: 'A sponsor/partner may wish to obtain a list of recent activities
+        associated with their merchant user. This
+
+        endpoint will return a list of activities for the merchant user with the option
+        to filter down to the loan level.
+
+
+        **Requirements:**
+
+        Authentication information, username, and password are required for this endpoint.
+        Sponsor ID will be determined
+
+        by the authentication information used.
+
+
+        - **request_user_id**: There must be a user ID in the Momnt system for this
+        GET request to succeed. That user
+
+        must be active and should have been established in previous interactions,
+        such as pre-onboarding or create_user.
+
+
+        **Please Note:** If the `request_user_id` used has a Salesrep role, the user
+        will only be able to view recent
+
+        activity where they were the user that sent the initial application invitation.
+        If the user is an Admin or
+
+        Salesmanager role, they will see all recent activity by all users.'
+      parameters:
+      - in: query
+        name: begin_date
+        schema:
+          type: string
+        description: 'limits the returned transactions to those requested on or after
+          the provided date.format: `MM/DD/YYYY`'
+      - in: query
+        name: end_date
+        schema:
+          type: string
+        description: 'limits the returned transactions to those requested on or before
+          the provided date.
+
+          format: `MM/DD/YYYY`.
+
+          If used with `begin_date`, `end_date` must be on or after `begin_date`'
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Returns the transactions for a specific loan number
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPartnerAllTransactionListList'
+          description: ''
+  /api/v1/sponsor/merchants/{request_user_id}/available-transactions/:
+    get:
+      operationId: Available Consumer Transactions
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPartnerMerchantAvailableTransactionsList'
+          description: ''
+  /api/v1/sponsor/merchants/{request_user_id}/invitation/:
+    get:
+      operationId: Consumer Invitation List
+      description: 'A sponsor/partner may wish to obtain a list of invitations associated
+        with their account. This endpoint will
+
+        provide a list of all consumer invitations for the merchant user.
+
+
+        **Requirements:**
+
+        - Authentication information, username, and password are required for this
+        endpoint.
+
+        - Sponsor ID will be determined by the authentication information used.
+
+        - request_user_id: There must be a user ID in the Momnt system for this GET
+        request to succeed. That user must be
+
+        active and should have been established in previous interactions, such as
+        pre-onboarding or create_user.
+
+        - Please Note: If the request_user_id used has a Salesrep role, the user will
+        only be able to view invitations where
+
+        they were the user that sent the initial application invitation. If the user
+        is an Admin or Salesmanager role, they
+
+        will see all invitations sent by all users.
+
+        request_user_id: There must be a user ID in the Momnt system for this GET
+        request to succeed. That user must be
+
+        active and should have been established in previous interactions, such as
+        pre-onboarding or create_user.
+
+        Please Note: If the request_user_id used has a Salesrep role, the user will
+        only be able to view invitations where
+
+        they were the user that sent the initial application invitation. If the user
+        is an Admin or Salesmanager role, they
+
+        will see all invitations sent by all users.'
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConsumerInvitationMerchantPortalList'
+          description: ''
+  /api/v1/sponsor/merchants/{request_user_id}/refundable-transactions/{consumer_application_uuid}/:
+    get:
+      operationId: Refundable Transactions
+      description: 'Returns a list of refundable transactions to check which transactions
+        are eligible
+
+        for a refund based on a consumer application.
+
+        **Requirements**:
+
+        - Authentication information, user, and password are required for this endpoint.
+
+        - Sponsor ID will be determined by the authentication information used.
+
+        - `request_user_id`: There must be a user ID in the Momnt system for this
+        GET request to succeed.
+
+        That user must be active and should have been established in previous interactions,
+
+        such as pre-onboarding or create_user.
+
+        - `loan_id`: Partner’s ID for the Application sent in the consumer invitation
+        initial POST.'
+      parameters:
+      - in: path
+        name: consumer_application_uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerRefundableTransactionList'
+          description: ''
+  /api/v1/sponsor/merchants/{request_user_id}/settled/:
+    post:
+      operationId: Consumer Charge Settled
+      description: 'For a Merchant/Contractor to see if a transaction is settled
+
+        (The funds from the transaction are in the destination account).'
+      parameters:
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - SponsorAPI _ Consumer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerSettledTransactionUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartnerSettledTransactionUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartnerSettledTransactionUpdate'
+        required: true
+      security:
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerSettledTransactionResponseSchema'
+          description: ''
+  /api/v1/sponsor/merchants/loan-applications/{request_user_id}/:
+    get:
+      operationId: Merchant Consumer Applications List
+      description: 'A sponsor/partner may wish to obtain a list of consumers/borrowers
+        associated with their account. This endpoint
+
+        will return a list of all consumer loan objects for the merchant.
+
+
+        **Requirements:**
+
+        - Authentication information, username, and password are required for this
+        endpoint.
+
+        - Sponsor ID will be determined by the authentication information used.
+
+        - request_user_id: There must be a user ID in the Momnt system for this GET
+        request to succeed. That user must be
+
+        active and should have been established in previous interactions, such as
+        pre-onboarding or create_user.
+
+        - Please Note: If the request_user_id used has a Salesrep role, the user will
+        only be able to view invitations
+
+        where they were the user that sent the initial application invitation. If
+        the user is an Admin or Salesmanager
+
+        role, they will see all invitations sent by all users.'
+      parameters:
+      - in: query
+        name: begin_date
+        schema:
+          type: string
+        description: 'Begin date of the consumer. format: ''YYYY-MM-DD'''
+      - in: query
+        name: end_date
+        schema:
+          type: string
+        description: 'End date of the consumer. format: ''YYYY-MM-DD'''
+      - in: query
+        name: external_org_id
+        schema:
+          type: string
+        description: External organization ID
+      - in: query
+        name: first_name
+        schema:
+          type: string
+        description: First name of the consumer
+      - in: query
+        name: last_name
+        schema:
+          type: string
+        description: Last name of the consumer
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: status
+        schema:
+          type: string
+        description: Status of the consumer
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerMerchantLoansRead'
+          description: ''
+  /api/v1/sponsor/merchants/loan-applications/{request_user_id}/loan/{loan_id}/:
+    get:
+      operationId: Consumer Information Details
+      description: 'A sponsor/partner may wish to obtain specific information about
+        a single consumer/borrower present in the
+
+        Momnt system.
+
+
+        **Requirements:**
+
+        - Authentication information, user, and password are required for this endpoint.
+        Sponsor ID will be
+
+        determined by the authentication information used.
+
+        - request_user_id: There must be a user ID in the Momnt system for this GET
+        request to succeed. That user
+
+        must be active and should have been established in previous interactions,
+        such as pre-onboarding or
+
+        create_user.
+
+        - loan_id: Partner''s ID for the Application sent in the initial POST.'
+      parameters:
+      - in: path
+        name: loan_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerMerchantLoansRead'
+          description: ''
+  /api/v1/sponsor/merchants/loan-applications/{request_user_id}/loan/{loan_id}/invite-portal/:
+    post:
+      operationId: Consumer Payment Portal Account Email Request
+      description: 'For a merchant to transact with a consumer, the consumer must
+        set up their Payment Portal account.
+
+        If the consumer hasn''t set up their account, this endpoint can be used to
+        send an email to the
+
+        consumer with the link to set up their account.
+
+
+        **Requirements:**
+
+        Authentication information, username, and password are required for this endpoint.
+        Sponsor ID will be
+
+        determined by the authentication information used.
+
+
+        - request_user_id: There must be a user ID in the Momnt system for this POST
+        request to succeed. That
+
+        user must be active and should have been established in previous interactions.
+
+
+        - Please Note: If the request_user_id used has a Salesrep role, the user will
+        only be able to request
+
+        where they were the user that sent the initial application invitation. If
+        the user is an Admin or
+
+        Salesmanager role, they will be able to send this request for all consumer
+        loans.
+
+
+        - loan_id: Partner''s ID for the Application sent in the initial consumer
+        application POST.'
+      parameters:
+      - in: path
+        name: loan_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+  /api/v1/sponsor/merchants/payment-request/:
+    post:
+      operationId: Consumer Payment Request Create
+      tags:
+      - SponsorAPI _ Consumer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerPaymentRequestCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerPaymentRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartnerConsumerPaymentRequestCreate'
+        required: true
+      security:
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerConsumerPaymentResponseSchema'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      callbacks:
+        Consumer Charge Callback:
+          /path-to-callback/:
+            post:
+              description: 'Consumer Charge Callback (POST)
+
+                After the sponsor initiates a consumer payment in the step above,
+                Momnt will send the payment request SMS to
+
+                the consumer. The consumer will respond to the SMS with a code sent
+                in the SMS to approve the charge and
+
+                initiate money movement. Once this is complete, the sponsor and merchant
+                will need to know the outcome of the
+
+                transaction. The result of the consumer charge and other relevant
+                details will be sent to the
+
+                transaction_callback_url. When consumer charge is completed - success
+                or failure - Momnt will POST information
+
+                to this fully qualified URL.
+
+
+                **Requirements:**
+
+                Before this callback will fire, a successful POST to send a consumer
+                payment request must have taken place.
+
+                Basic Auth is supported by a username/password combination which is
+                pre-shared between Momnt and the sponsor.'
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/CallbackConsumerPaymentRequestSchema'
+                required: true
+              responses:
+                '200':
+                  description: No response body
+  /api/v1/sponsor/merchants/payment-request/{request_user_id}/:
+    get:
+      operationId: Consumer Payment Request List
+      description: 'A sponsor/partner may wish to obtain a list of consumer payment
+        requests associated with their account that are
+
+        pending approval. This endpoint will return a list of all consumer payment
+        request objects for the merchant. A
+
+        consumer payment request, once approved, becomes a Consumer Charge which is
+        queried using the endpoint above -
+
+        this is where you will see the result of the actual transaction. The Payment
+        Requests query can be used to view
+
+        the payment requests that have been sent and whether they have been approved
+        by the consumer. The Payment Request
+
+        and the related Consumer Charge will have the same payment_request_id.
+
+
+        **Requirements:**
+
+        Authentication information, username, and password are required for this endpoint.
+        Sponsor ID will be determined
+
+        by the authentication information used.
+
+
+        - **request_user_id**: There must be a user ID in the Momnt system for this
+        GET request to succeed. That user
+
+        must be active and should have been established in previous interactions,
+        such as pre-onboarding or create_user.
+
+
+        - **begin_date and end_date**: These can be used to limit the payment requests
+        returned by a date range. If no
+
+        begin or end date is passed, then all payment requests for that merchant will
+        be returned.'
+      parameters:
+      - in: query
+        name: begin_date
+        schema:
+          type: string
+        description: 'Begin date of the consumer. format: ''YYYY-MM-DD'''
+      - in: query
+        name: end_date
+        schema:
+          type: string
+        description: 'End date of the consumer. format: ''YYYY-MM-DD'''
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerConsumerPaymentRequestList'
+          description: ''
+  /api/v1/sponsor/merchants/refund-payment-request/:
+    post:
+      operationId: Consumer Refund Request
+      description: 'For a merchant/contractor to refund a consumer, the partner/sponsor
+        must first send a POST to Momnt to
+
+        request a payment refund. This request triggers an SMS message to the consumer
+        requesting the refund
+
+        confirmation. The content of this SMS provides the consumer with the transaction
+        amount, transaction type,
+
+        and a code they must reply with to approve the refund.
+
+
+        There will be a response to this POST request to notify the partner/sponsor
+        that the refund request was
+
+        successfully sent or if it failed before sending. Additionally, a callback
+        will be posted to the
+
+        partner/sponsor once the transaction is completed (success or failure), this
+        is documented next.
+
+
+        **Requirements:**
+
+
+        - **Authentication information** (username and password) is required for this
+        endpoint. Sponsor ID will be
+
+        determined by the authentication information used.
+
+        - This API will only be processed successfully if the merchant''s status is
+        **''Active''** or
+
+        **''Hold – Pause Applications''**.
+
+        - Only **Admin users** are authorized to initiate a refund request. If a user
+        with insufficient
+
+        permissions attempts to initiate a refund, the request will return an error.'
+      tags:
+      - SponsorAPI _ Consumer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerRefundConsumerPaymentRequestCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartnerRefundConsumerPaymentRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartnerRefundConsumerPaymentRequestCreate'
+        required: true
+      security:
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+          description: ''
+      callbacks:
+        Consumer Refund Callback:
+          /path-to-callback/:
+            post:
+              description: 'Consumer Refund Callback (POST)
+
+                The result of the consumer refund and other relevant details will
+                be sent to the `transaction_callback_url`.
+
+                When consumer refund is completed, success or failure, Momnt will
+                POST information to this fully qualified URL.
+
+                **Requirements:**
+
+                - Before this callback will fire, a successful POST to send a consumer
+                refund request must have taken place.
+
+                - Basic Auth is supported by a username/password combination which
+                is pre-shared between Momnt and the sponsor.'
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/CallbackRefundCPRSchema'
+                required: true
+              responses:
+                '200':
+                  description: No response body
+  /api/v1/sponsor/merchants/transactions/{request_user_id}/:
+    get:
+      operationId: Consumer Transactions List
+      description: 'A sponsor/partner merchant user may wish to obtain a list of consumer
+        charge or refund transactions
+
+        associated with their account. This endpoint will provide a list of all consumer
+        charge or refund
+
+        objects for the merchant user, either successful or failed. A Consumer Charge
+        is the transaction
+
+        that occurs once a payment request is approved by the consumer. If a consumer
+        does not approve a
+
+        Payment Request, it does not become a Consumer Charge. Payment Request(s)
+        will not be returned
+
+        with this endpoint. To see all transaction, including payment requests, use
+        the
+
+        "Consumer - All Transaction Activity" endpoint.
+
+
+        **Requirements**:
+
+        - Authentication information, username, and password are required for this
+        endpoint.
+
+        - Sponsor ID will be determined by the authentication information used.
+
+
+        - request_user_id: There must be a user ID in the Momnt system for this GET
+        request to succeed.
+
+        - That user must be active and should have been established in previous interactions,
+        such as
+
+        pre-onboarding or create_user.'
+      parameters:
+      - in: query
+        name: begin_date
+        schema:
+          type: string
+        description: 'Limits the returned transactions to transaction which have a
+          request_datetimeon or after the provided date. format: ''YYYY-MM-DD'''
+      - in: query
+        name: end_date
+        schema:
+          type: string
+        description: 'Limits the returned transactions to transaction which have a
+          request_datetimeon or before the provided date. format: ''YYYY-MM-DD'''
+      - in: path
+        name: request_user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - SponsorAPI _ Consumer
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerConsumerTransaction'
+          description: ''
 components:
   schemas:
     AccountExclusion:
@@ -699,12 +1816,15 @@ components:
           - Other
           - Collections Agency
           type: string
-          description: |-
-            * `Main/HQ` - Main/HQ
+          description: '* `Main/HQ` - Main/HQ
+
             * `Home` - Home
+
             * `Work` - Work
+
             * `Other` - Other
-            * `Collections Agency` - Collections Agency
+
+            * `Collections Agency` - Collections Agency'
           x-spec-enum-id: 4b3e23bbd4bee69a
         address_1:
           type: string
@@ -739,12 +1859,15 @@ components:
           - Other
           - Collections Agency
           type: string
-          description: |-
-            * `Main/HQ` - Main/HQ
+          description: '* `Main/HQ` - Main/HQ
+
             * `Home` - Home
+
             * `Work` - Work
+
             * `Other` - Other
-            * `Collections Agency` - Collections Agency
+
+            * `Collections Agency` - Collections Agency'
           x-spec-enum-id: 4b3e23bbd4bee69a
         address_1:
           type: string
@@ -874,73 +1997,73 @@ components:
     ApprovedMerchantDetails:
       type: object
       properties:
-        sponsor:
+        display_name:
           type: string
+        can_update_display_name:
+          type: string
+          readOnly: true
+        merchant_facing_brand:
+          type: string
+        internal_id:
+          type: string
+        staged_funding_applied:
+          type: string
+          readOnly: true
         dba:
           type: string
           maxLength: 255
         note:
           type: string
-        hubspot_url:
+        sub_program:
           type: string
           readOnly: true
         can_update_risk_tier:
           type: string
           readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        can_update_display_name:
-          type: string
-          readOnly: true
-        staged_funding_applied:
-          type: string
-          readOnly: true
-        merchant_facing_brand:
-          type: string
-        rate_sheet:
-          type: string
-          readOnly: true
-        email:
-          type: string
-        human_readable_id:
-          type: string
-          maxLength: 10
         status:
           type: string
-        display_name:
-          type: string
-        address:
+        hubspot_url:
           type: string
           readOnly: true
-        sub_program:
+        sponsor:
           type: string
-          readOnly: true
         change_rate_sheet:
+          type: string
+          readOnly: true
+        phone:
+          type: string
+          readOnly: true
+        address:
           type: string
           readOnly: true
         can_update_status:
           type: string
           readOnly: true
-        consumer_facing_brand:
+        has_custom_staged_funding:
           type: string
-        risk_tier:
-          type: string
+          readOnly: true
         application_uuid:
           type: string
           readOnly: true
+        risk_tier:
+          type: string
+        consumer_facing_brand:
+          type: string
+        name:
+          type: string
+          maxLength: 255
         program:
-          type: string
-        phone:
-          type: string
-          readOnly: true
-        internal_id:
           type: string
         offer_codes:
           type: array
           items:
             $ref: '#/components/schemas/OfferCodes'
-        has_custom_staged_funding:
+        email:
+          type: string
+        human_readable_id:
+          type: string
+          maxLength: 10
+        rate_sheet:
           type: string
           readOnly: true
       required:
@@ -1025,28 +2148,33 @@ components:
     AuditLog:
       type: object
       properties:
-        user:
+        object_id:
           type: string
-        source_of_change:
+          maxLength: 255
+        object:
           type: string
           readOnly: true
-        id:
+        user_id:
           type: integer
-          readOnly: true
-        datetime:
-          type: string
-          format: date-time
         event_type:
-          type: string
-          readOnly: true
-        object_json_repr:
           type: string
           readOnly: true
         object_repr:
           type: string
           title: Object representation
-        object:
+        object_json_repr:
           type: string
+          readOnly: true
+        source_of_change:
+          type: string
+          readOnly: true
+        user:
+          type: string
+        datetime:
+          type: string
+          format: date-time
+        id:
+          type: integer
           readOnly: true
         new_values:
           type: string
@@ -1054,11 +2182,6 @@ components:
         old_values:
           type: string
           readOnly: true
-        object_id:
-          type: string
-          maxLength: 255
-        user_id:
-          type: integer
         view_details:
           type: string
           readOnly: true
@@ -1119,10 +2242,11 @@ components:
           - bankAccount.updated
           - bankAccount.deleted
           type: string
-          description: |-
-            * `bankAccount.created` - bankAccount.created
+          description: '* `bankAccount.created` - bankAccount.created
+
             * `bankAccount.updated` - bankAccount.updated
-            * `bankAccount.deleted` - bankAccount.deleted
+
+            * `bankAccount.deleted` - bankAccount.deleted'
           x-spec-enum-id: f2350a59efa6a3bd
         data:
           $ref: '#/components/schemas/Data'
@@ -1182,9 +2306,10 @@ components:
       - crb_guid
     CallbackConsumerApplicationSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         consumer_info:
           allOf:
@@ -1202,12 +2327,15 @@ components:
           - Declined
           - Cancel
           type: string
-          description: |-
-            * `Approve` - Approve
+          description: '* `Approve` - Approve
+
             * `Approved` - Approved
+
             * `Accepted` - Accepted
+
             * `Declined` - Declined
-            * `Cancel` - Cancel
+
+            * `Cancel` - Cancel'
           x-spec-enum-id: ed3a0f2c8be9be07
         status_date:
           type: string
@@ -1291,11 +2419,16 @@ components:
           description: External User ID that is sent in the consumer loan invitation.
         decision_detail:
           type: string
-          description: |-
-            The decision_detail field can contain one of the following values:
-            - "" (empty string, default when the following specific decision detail don't apply)
-            - "frozen_credit" (indicating the consumer's credit was frozen)
-            - "approved_for_less" (indicating the consumer was approved for a lower amount than requested)
+          description: 'The decision_detail field can contain one of the following
+            values:
+
+            - "" (empty string, default when the following specific decision detail
+            don''t apply)
+
+            - "frozen_credit" (indicating the consumer''s credit was frozen)
+
+            - "approved_for_less" (indicating the consumer was approved for a lower
+            amount than requested)'
         is_valid_for_transaction:
           type: boolean
           description: True or False - Can this account transact?
@@ -1365,9 +2498,10 @@ components:
       - zip_code
     CallbackConsumerPaymentRequestSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         application_id:
           type: string
@@ -1504,9 +2638,10 @@ components:
       - owner_percentage
     CallbackPartnerMerchantPreOnboardingSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         owners:
           type: array
@@ -1546,14 +2681,19 @@ components:
           - Partnership
           type: string
           x-spec-enum-id: d336c109f46053bf
-          description: |-
-            Expected Values: Sole Proprietorship, LLC, S Corp, or C Corp, or Partnership.
+          description: 'Expected Values: Sole Proprietorship, LLC, S Corp, or C Corp,
+            or Partnership.
+
 
             * `Sole Proprietorship` - Sole Proprietorship
+
             * `LLC` - LLC
+
             * `S Corp` - S Corp
+
             * `C Corp` - C Corp
-            * `Partnership` - Partnership
+
+            * `Partnership` - Partnership'
         offers_financing:
           type: boolean
         average_customer_spend:
@@ -1587,11 +2727,13 @@ components:
             - Cash
             - Check
             type: string
-            description: |-
-              * `Visa/ Mastercard` - Visa/ Mastercard
+            description: '* `Visa/ Mastercard` - Visa/ Mastercard
+
               * `Amex` - Amex
+
               * `Cash` - Cash
-              * `Check` - Check
+
+              * `Check` - Check'
             x-spec-enum-id: 1861d56d34e238b9
         merchant_account_exists:
           type: boolean
@@ -1623,9 +2765,10 @@ components:
       - yearly_financing_volume
     CallbackRefundCPRSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         status:
           type: string
@@ -1765,9 +2908,10 @@ components:
       - consumer_consented_on
     CertificateOfCompletionCreate:
       type: object
-      description: |-
-        Serializer for creating a new Certificate of Completion (CoC) entry.
-        Validates merchant, consumer account, and merchant consent.
+      description: 'Serializer for creating a new Certificate of Completion (CoC)
+        entry.
+
+        Validates merchant, consumer account, and merchant consent.'
       properties:
         consumer_account_uuid:
           type: string
@@ -1978,175 +3122,109 @@ components:
     ConsumerAccount:
       type: object
       properties:
+        can_update_risk_status:
+          type: boolean
+          readOnly: true
+        payment_due_date:
+          type: string
+          format: date
+        transunion_ssn_last_four:
+          type: string
+        origination_date:
+          type: string
+          format: date
+        can_make_payment:
+          type: boolean
+          readOnly: true
+        first_billing_cycle_date:
+          type: string
+          readOnly: true
+        staged_funding_applied:
+          type: boolean
+          readOnly: true
+        preferred_language:
+          $ref: '#/components/schemas/PreferredLanguage'
         loan_number:
           type: string
           title: Application ID/Loan number
           maxLength: 28
-        current_amount_spent:
+        link_to_borrower_agreement_origination:
+          type: string
+          format: uri
+        note:
+          type: string
+        scra:
+          type: string
+          format: date-time
+          readOnly: true
+        current_principal_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        lender:
+          type: string
+        next_billing_date:
+          type: string
+          format: date
+        max_approved_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        deferred_finance_charge_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        is_active:
+          type: boolean
+          nullable: true
+        request_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        remaining_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        promo_end_date:
+          type: string
+          readOnly: true
+        designated_bank_account_payment_provider:
+          type: string
+          nullable: true
+          readOnly: true
+        dq_exclusion_reason:
+          type: boolean
+          readOnly: true
+        credit_limit:
           type: string
           format: decimal
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         make_payment:
           type: boolean
           readOnly: true
-        note:
-          type: string
-        origination_date:
-          type: string
-          format: date
-        purchase_window_end_date:
-          type: string
-          readOnly: true
-        dob:
-          type: string
-          format: date
-        transunion_ssn_last_four:
-          type: string
-        current_principal_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        fees_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        merchant:
-          $ref: '#/components/schemas/ConsumerMerchant'
-        remaining_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        late_fee_amount:
-          type: number
-          format: double
-          readOnly: true
-        property_address:
-          $ref: '#/components/schemas/ConsumerAddress'
-        bill_load_file_date:
-          type: string
-          format: date
-        total_pay_off_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        crb_stuck_loan:
-          type: boolean
-          description: Check if the loan is stuck in the CRB lender funding
-          readOnly: true
-        dq_status:
-          allOf:
-          - $ref: '#/components/schemas/DQStatus'
-          default: {}
-        product_details:
-          type: string
-        scra:
-          type: string
-          format: date-time
-          readOnly: true
-        user:
-          type: integer
-        update_ssn_last_four:
-          type: boolean
-          readOnly: true
-        can_update_risk_status:
-          type: boolean
-          readOnly: true
-        product_name:
-          type: string
-        can_make_payment:
-          type: boolean
-          readOnly: true
-        apr:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
-        next_billing_date:
-          type: string
-          format: date
-        risk_status:
-          type: string
-        deferred_finance_charge_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        account_status:
-          type: string
-        request_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        lender:
-          type: string
-        is_active:
-          type: boolean
-          nullable: true
-        edit_dq_exclusion_reason:
-          type: boolean
-          readOnly: true
-        payment_due_date:
-          type: string
-          format: date
-        staged_funding_applied:
-          type: boolean
-          readOnly: true
-        payment_due:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        update_address:
-          type: boolean
-          readOnly: true
-        consumer_name:
-          type: string
-        update_dob:
-          type: boolean
-          readOnly: true
-        can_update_credit_limit:
-          type: boolean
-          readOnly: true
-        promo_end_date:
-          type: string
-          readOnly: true
-        max_approved_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        collections_agency:
-          type: integer
-          nullable: true
-        first_billing_cycle_date:
-          type: string
-          readOnly: true
-        suppress_email_communication:
-          type: boolean
-        dq_exclusion_reason:
-          type: boolean
-          readOnly: true
-        link_to_borrower_agreement_origination:
-          type: string
-          format: uri
-        email:
-          type: string
-          format: email
-        merchant_phone_number:
-          type: string
-        ssn_last_four:
-          type: string
-          maxLength: 4
-          minLength: 4
         repay_link:
           type: string
           nullable: true
           readOnly: true
-        total_balance:
+        merchant:
+          $ref: '#/components/schemas/ConsumerMerchant'
+        update_dob:
+          type: boolean
+          readOnly: true
+        consumer_name:
+          type: string
+        current_amount_spent:
           type: string
           format: decimal
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        maturity_date:
+        dq_status:
+          allOf:
+          - $ref: '#/components/schemas/DQStatus'
+          default: {}
+        late_fees_balance:
           type: string
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/ConsumerAddress'
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         finance_charge_balance:
           type: string
           format: decimal
@@ -2154,50 +3232,116 @@ components:
         conversion_date:
           type: string
           readOnly: true
-        designated_bank_account_payment_provider:
-          type: string
-          nullable: true
-          readOnly: true
         servicing_account:
           type: string
-        total_amount_past_due:
+        address:
+          $ref: '#/components/schemas/ConsumerAddress'
+        fees_balance:
           type: string
           format: decimal
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        preferred_language:
-          $ref: '#/components/schemas/PreferredLanguage'
         first_payment_due_date:
           type: string
           readOnly: true
-        credit_limit:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        update_address:
+          type: boolean
+          readOnly: true
+        edit_dq_exclusion_reason:
+          type: boolean
+          readOnly: true
         next_payment_due_date:
           type: string
           readOnly: true
+        property_address:
+          $ref: '#/components/schemas/ConsumerAddress'
+        security_pin:
+          type: string
+          maxLength: 4
+        collections_agency:
+          type: integer
+          nullable: true
+        apr:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+        dob:
+          type: string
+          format: date
+        total_pay_off_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        risk_status:
+          type: string
+        user:
+          type: integer
         consumer_facing_brand:
           type: string
+        maturity_date:
+          type: string
+          readOnly: true
+        merchant_phone_number:
+          type: string
+        ssn_last_four:
+          type: string
+          maxLength: 4
+          minLength: 4
+        link_to_borrower_agreement_amortization:
+          type: string
+          format: uri
+        update_ssn_last_four:
+          type: boolean
+          readOnly: true
+        can_update_credit_limit:
+          type: boolean
+          readOnly: true
+        account_status:
+          type: string
+        crb_stuck_loan:
+          type: boolean
+          description: Check if the loan is stuck in the CRB lender funding
+          readOnly: true
+        product_details:
+          type: string
+        product_name:
+          type: string
+        suppress_email_communication:
+          type: boolean
         loss_mitigator:
           allOf:
           - $ref: '#/components/schemas/LossMitigator'
           readOnly: true
+        payment_due:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        email:
+          type: string
+          format: email
+        total_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        purchase_window_end_date:
+          type: string
+          readOnly: true
+        loan_product_title:
+          type: string
+        late_fee_amount:
+          type: number
+          format: double
+          readOnly: true
+        total_amount_past_due:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         payment_reversal_fee:
           type: number
           format: double
           readOnly: true
-        link_to_borrower_agreement_amortization:
+        bill_load_file_date:
           type: string
-          format: uri
-        loan_product_title:
-          type: string
-        security_pin:
-          type: string
-          maxLength: 4
-        late_fees_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+          format: date
       required:
       - account_status
       - address
@@ -2515,10 +3659,11 @@ components:
           - Other
           - ''
           type: string
-          description: |-
-            * `Rent` - Rent
+          description: '* `Rent` - Rent
+
             * `Own` - Own
-            * `Other` - Other
+
+            * `Other` - Other'
           x-spec-enum-id: 520a566bfc4ee4ee
       required:
       - address_1
@@ -2604,40 +3749,9 @@ components:
     ConsumerApplication:
       type: object
       properties:
-        sponsor:
-          type: string
-        loan_number:
-          type: string
-        purchase_window_end_date:
-          type: string
-          format: date-time
-        requested_loan_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        name:
-          type: string
-        begin_date:
-          type: string
-          format: date
-        product_name:
-          type: string
-          readOnly: true
         merchant_sales_rep:
           type: string
-        merchant_uuid:
-          type: string
-        requested_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        merchant_program:
-          type: string
-        max_approved_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        email:
+        loan_number:
           type: string
         approved_amount:
           type: string
@@ -2645,19 +3759,50 @@ components:
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         status:
           type: string
-        uuid:
+        max_approved_amount:
           type: string
-          format: uuid
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        sponsor:
+          type: string
         merchant_name:
           type: string
+        phone_number:
+          type: string
+          readOnly: true
+        begin_date:
+          type: string
+          format: date
+        requested_loan_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         activate_date:
           type: string
           format: date-time
-        phone_number:
+        merchant_program:
+          type: string
+        merchant_uuid:
+          type: string
+        requested_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        name:
+          type: string
+        uuid:
+          type: string
+          format: uuid
+        product_name:
           type: string
           readOnly: true
         status_detail:
           type: string
+        email:
+          type: string
+        purchase_window_end_date:
+          type: string
+          format: date-time
       required:
       - activate_date
       - email
@@ -2714,13 +3859,17 @@ components:
       - uuid
     ConsumerBasicInfo:
       type: object
-      description: |-
-        Mixin to allow partial updates of model instances.
+      description: 'Mixin to allow partial updates of model instances.
+
         This mixin overrides the default `update` method to allow partial updates
+
         of model instances, which is useful when you want to update only a subset
+
         of fields without requiring all fields to be provided.
+
         When using this mixin, it should be the first parent class in order to ensure
-        that this `update` method is called.
+
+        that this `update` method is called.'
       properties:
         first_name:
           type: string
@@ -2920,11 +4069,13 @@ components:
           - Greater than 5 years
           - null
           type: string
-          description: |-
-            * `Less than 1 year` - Less than 1 year
+          description: '* `Less than 1 year` - Less than 1 year
+
             * `1-3 years` - 1-3 years
+
             * `3-5 years` - 3-5 years
-            * `Greater than 5 years` - Greater than 5 years
+
+            * `Greater than 5 years` - Greater than 5 years'
           x-spec-enum-id: 8a8d1d3566cb965c
           nullable: true
         employment_status:
@@ -2937,14 +4088,19 @@ components:
           - Self-Employed
           - Other
           type: string
-          description: |-
-            * `Employed` - Employed
+          description: '* `Employed` - Employed
+
             * `Salaried` - Salaried
+
             * `Hourly` - Hourly
+
             * `Retired` - Retired
+
             * `Unemployed` - Unemployed
+
             * `Self-Employed` - Self-Employed
-            * `Other` - Other
+
+            * `Other` - Other'
           x-spec-enum-id: 2c58970bcb01fe00
         phone_number_type:
           enum:
@@ -2959,16 +4115,23 @@ components:
           - Collections Agency
           - null
           type: string
-          description: |-
-            * `Cell` - Cell
+          description: '* `Cell` - Cell
+
             * `Home` - Home
+
             * `Main` - Main
+
             * `Sales` - Sales
+
             * `Back Office` - Back Office
+
             * `Alternate` - Alternate
+
             * `Skiptrace` - Skiptrace
+
             * `Employer` - Employer
-            * `Collections Agency` - Collections Agency
+
+            * `Collections Agency` - Collections Agency'
           x-spec-enum-id: fa6343f5cb6acedc
           nullable: true
         extension:
@@ -3079,11 +4242,13 @@ components:
           - sponsor_api
           - widget
           type: string
-          description: |-
-            * `payment_calculator` - Payment Calculator
+          description: '* `payment_calculator` - Payment Calculator
+
             * `merchant_portal` - Merchant Portal
+
             * `sponsor_api` - Sponsor Api
-            * `widget` - Widget
+
+            * `widget` - Widget'
           x-spec-enum-id: 9e48dc939700182f
           default: merchant_portal
       required:
@@ -3447,9 +4612,9 @@ components:
           - checking
           - savings
           type: string
-          description: |-
-            * `checking` - checking
-            * `savings` - savings
+          description: '* `checking` - checking
+
+            * `savings` - savings'
           x-spec-enum-id: e345011d0e810980
       required:
       - ach_account_number
@@ -3502,10 +4667,11 @@ components:
           - 111
           - 113
           type: integer
-          description: |-
-            * `109` - 109
+          description: '* `109` - 109
+
             * `111` - 111
-            * `113` - 113
+
+            * `113` - 113'
           x-spec-enum-id: 31f065544bcb97d1
       required:
       - amount
@@ -4277,11 +5443,13 @@ components:
           - pending
           - errored
           type: string
-          description: |-
-            * `verified` - verified
+          description: '* `verified` - verified
+
             * `verificationFailed` - verificationFailed
+
             * `pending` - pending
-            * `errored` - errored
+
+            * `errored` - errored'
           x-spec-enum-id: 0a428a24854ff277
       required:
       - accountID
@@ -4296,9 +5464,9 @@ components:
           - card
           - bank
           type: string
-          description: |-
-            * `card` - card
-            * `bank` - bank
+          description: '* `card` - card
+
+            * `bank` - bank'
           x-spec-enum-id: a542bc5ea6bba918
       required:
       - id
@@ -4346,17 +5514,25 @@ components:
           - SESSION_EXPIRED
           - SESSION_COMPLETE
           type: string
-          description: |-
-            * `WAITING_FOR_USER_TO_REDIRECT` - WAITING_FOR_USER_TO_REDIRECT
+          description: '* `WAITING_FOR_USER_TO_REDIRECT` - WAITING_FOR_USER_TO_REDIRECT
+
             * `APP_OPENED` - APP_OPENED
+
             * `DOCUMENT_FRONT_UPLOADED` - DOCUMENT_FRONT_UPLOADED
+
             * `DOCUMENT_BACK_UPLOADED` - DOCUMENT_BACK_UPLOADED
+
             * `DOCUMENT_SELFIE_UPLOADED` - DOCUMENT_SELFIE_UPLOADED
+
             * `DOCUMENTS_UPLOADED` - DOCUMENTS_UPLOADED
+
             * `VERIFICATION_COMPLETED` - VERIFICATION_COMPLETED
+
             * `RESUBMIT` - RESUBMIT
+
             * `SESSION_EXPIRED` - SESSION_EXPIRED
-            * `SESSION_COMPLETE` - SESSION_COMPLETE
+
+            * `SESSION_COMPLETE` - SESSION_COMPLETE'
           x-spec-enum-id: cf9a13616848368c
         environmentName:
           type: string
@@ -4403,9 +5579,9 @@ components:
           - checking
           - savings
           type: string
-          description: |-
-            * `checking` - checking
-            * `savings` - savings
+          description: '* `checking` - checking
+
+            * `savings` - savings'
           x-spec-enum-id: e345011d0e810980
       required:
       - ach_account_number
@@ -4500,15 +5676,19 @@ components:
       required:
       - role_id
     EventBusName:
-      description: |-
-        Enumeration of supported EventBridge event bus names.
+      description: 'Enumeration of supported EventBridge event bus names.
+
 
         This enum defines logical identifiers for different AWS EventBridge buses
+
         used within the system to route events based on context or usage.
 
+
         Attributes:
+
         APPLICATION (str): Event bus used for application-specific events.
-        DEFAULT (str): Default event bus.
+
+        DEFAULT (str): Default event bus.'
       enum:
       - application
       - default
@@ -4585,16 +5765,19 @@ components:
       - transaction_amount
     ExternalOfferCodeCreateSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
           format: uuid
-          description: |-
-            External Partner user ID of an existing user set up at Momnt who creating the Offer Code.
-            This user must be an active merchant admin user for the Merchant used in the contractor_id path.
+          description: 'External Partner user ID of an existing user set up at Momnt
+            who creating the Offer Code.
+
+            This user must be an active merchant admin user for the Merchant used
+            in the contractor_id path.'
         name:
           type: string
           description: The name of the Offer Code. Alpha string between 2 and 80 characters.
@@ -4608,9 +5791,10 @@ components:
         rate_sheet_merchant_product_prices:
           type: array
           items: {}
-          description: |-
-            The value of the rate_sheet_merchant_product_price_id (found in the Merchant Rate Sheet Query)
-            of the products the Merchant wants to add to this rate sheet.
+          description: 'The value of the rate_sheet_merchant_product_price_id (found
+            in the Merchant Rate Sheet Query)
+
+            of the products the Merchant wants to add to this rate sheet.'
           maxItems: 7
           minItems: 2
       required:
@@ -4639,16 +5823,19 @@ components:
       - rate_sheet_merchant_product_prices
     ExternalOfferCodeUpdateResponseSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
           format: uuid
-          description: |-
-            External Partner user ID of an existing user set up at Momnt who creating the Offer Code.
-            This user must be an active merchant admin user for the Merchant used in the contractor_id path.
+          description: 'External Partner user ID of an existing user set up at Momnt
+            who creating the Offer Code.
+
+            This user must be an active merchant admin user for the Merchant used
+            in the contractor_id path.'
         name:
           type: string
           description: The name of the Offer Code. Alpha string between 2 and 80 characters.
@@ -4662,14 +5849,16 @@ components:
         rate_sheet_merchant_product_prices:
           type: array
           items: {}
-          description: |-
-            The value of the rate_sheet_merchant_product_price_id (found in the Merchant Rate Sheet Query)
-            of the products the Merchant wants to add to this rate sheet.
+          description: 'The value of the rate_sheet_merchant_product_price_id (found
+            in the Merchant Rate Sheet Query)
+
+            of the products the Merchant wants to add to this rate sheet.'
         message:
           type: string
-          description: |-
-            Used on the response to return a message when the offer code name is changed.
-            And it will be the only field when the offer code is removed.
+          description: 'Used on the response to return a message when the offer code
+            name is changed.
+
+            And it will be the only field when the offer code is removed.'
       required:
       - name
     FailedRuleReason:
@@ -5724,9 +6913,10 @@ components:
       - theme_css
     MerchantCommonResponse:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         message:
           type: string
@@ -6870,34 +8060,23 @@ components:
     MerchantStatement:
       type: object
       properties:
+        statement_number:
+          type: string
+          maxLength: 10
         merchant_info:
           $ref: '#/components/schemas/MerchantStatementMerchantInfo'
-        statement_summary:
+        applications_approved:
+          type: integer
+        success_statement_details:
           type: string
           readOnly: true
-        success_statement_details:
+        statement_summary:
           type: string
           readOnly: true
         amount_paid_to_you:
           type: string
           format: decimal
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        total_credit_limit_approved:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        net_purchases:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        applications_approved:
-          type: integer
-        statement_number:
-          type: string
-          maxLength: 10
-        branding:
-          type: string
-          readOnly: true
         fail_statement_details:
           type: string
           readOnly: true
@@ -6909,6 +8088,17 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
+        branding:
+          type: string
+          readOnly: true
+        net_purchases:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        total_credit_limit_approved:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
       required:
       - amount_paid_to_you
       - applications_approved
@@ -7067,13 +8257,17 @@ components:
       properties:
         transaction_type:
           type: string
-          description: |-
-            Type of transaction. Examples:
+          description: 'Type of transaction. Examples:
+
             - Merchant Fee Credit
+
             - Momnt Merchant Fee Debit
+
             - Sponsor Fee Debit
+
             - Consumer Refund Debit
-            - Artis Merchant Fee Debit
+
+            - Artis Merchant Fee Debit'
         transaction_amount:
           type: string
           format: decimal
@@ -7286,11 +8480,13 @@ components:
           - Salesmanager
           - Salesrep
           type: string
-          description: |-
-            * `Admin` - Admin
+          description: '* `Admin` - Admin
+
             * `Salesperson` - Salesperson
+
             * `Salesmanager` - Salesmanager
-            * `Salesrep` - Salesrep
+
+            * `Salesrep` - Salesrep'
           x-spec-enum-id: c42fccdaad47136b
           writeOnly: true
       required:
@@ -7396,10 +8592,11 @@ components:
           - merchant-sales-rep
           - merchant-sales-manager
           type: string
-          description: |-
-            * `merchant-admin` - merchant-admin
+          description: '* `merchant-admin` - merchant-admin
+
             * `merchant-sales-rep` - merchant-sales-rep
-            * `merchant-sales-manager` - merchant-sales-manager
+
+            * `merchant-sales-manager` - merchant-sales-manager'
           x-spec-enum-id: 33122be08b53e11c
         locations:
           type: array
@@ -7410,9 +8607,9 @@ components:
           - Active
           - Inactive
           type: string
-          description: |-
-            * `Active` - Active
-            * `Inactive` - Inactive
+          description: '* `Active` - Active
+
+            * `Inactive` - Inactive'
           x-spec-enum-id: 2d9455dd451bbf4b
           default: Active
       required:
@@ -7517,13 +8714,17 @@ components:
           - ''
           - null
           type: string
-          description: |-
-            * `ach-debit-collect` - ach-debit-collect
+          description: '* `ach-debit-collect` - ach-debit-collect
+
             * `ach-debit-fund` - ach-debit-fund
+
             * `ach-credit-standard` - ach-credit-standard
+
             * `ach-credit-same-day` - ach-credit-same-day
+
             * `card-payment` - card-payment
-            * `moov-wallet` - moov-wallet
+
+            * `moov-wallet` - moov-wallet'
           x-spec-enum-id: f730c892815b5c8b
           nullable: true
         lender:
@@ -7548,25 +8749,45 @@ components:
       - transaction_status
       - transaction_type
     MomntEvent:
-      description: |-
-        Base model for all Momnt platform events sent to AWS EventBridge.
+      description: 'Base model for all Momnt platform events sent to AWS EventBridge.
+
 
         This class defines the common structure and metadata required for event publication,
+
         and serves as the foundation for more specific event types. It enforces versioning,
-        event bus targeting, and standard fields like `initiated_by` and `env` to ensure
+
+        event bus targeting, and standard fields like `initiated_by` and `env` to
+        ensure
+
         consistency across event payloads.
 
+
         Attributes:
+
         version (str): Semantic version of the event schema (default: "1.0.0").
-        event_bus_name (EventBusName): Target EventBridge bus for the event (default: EventBusName.APPLICATION).
-        detail_type (str): A descriptor for the type of event, used by consumers for filtering.
-        initiated_by (Optional[str]): Identifier for the actor or system that initiated the event (default: "Unset").
-        env (Optional[str]): The environment (e.g., dev, staging, prod) from which the event was
+
+        event_bus_name (EventBusName): Target EventBridge bus for the event (default:
+        EventBusName.APPLICATION).
+
+        detail_type (str): A descriptor for the type of event, used by consumers for
+        filtering.
+
+        initiated_by (Optional[str]): Identifier for the actor or system that initiated
+        the event (default: "Unset").
+
+        env (Optional[str]): The environment (e.g., dev, staging, prod) from which
+        the event was
+
         emitted (default: "Unset").
 
+
         Methods:
-        validate_version(v: str): Ensures the `version` string adheres to semantic versioning (X.Y.Z).
-        to_json(): Serializes the event to JSON, excluding internal routing metadata (`detail_type`, `event_bus_name`).
+
+        validate_version(v: str): Ensures the `version` string adheres to semantic
+        versioning (X.Y.Z).
+
+        to_json(): Serializes the event to JSON, excluding internal routing metadata
+        (`detail_type`, `event_bus_name`).'
       properties:
         version:
           default: 1.0.0
@@ -7615,9 +8836,9 @@ components:
           - connected
           - disconnected
           type: string
-          description: |-
-            * `connected` - connected
-            * `disconnected` - disconnected
+          description: '* `connected` - connected
+
+            * `disconnected` - disconnected'
           x-spec-enum-id: fee37c729ffeff01
         number_of_active_loans:
           type: integer
@@ -8838,9 +10059,10 @@ components:
       - code
     PartnerConsumerOfferUpdateResponse:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         consumer_invitation_link:
           type: string
@@ -8850,9 +10072,10 @@ components:
       - consumer_invitation_link
     PartnerConsumerPaymentRequestCreate:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
@@ -8864,11 +10087,13 @@ components:
           maxLength: 128
         transaction_description:
           type: integer
-          description: |-
-            The ID of the transaction type being sent:
+          description: 'The ID of the transaction type being sent:
+
             - **109** - Consumer Deposit/Initial Charge,
+
             - **111** - Consumer Project Charge,
-            - **113** - Consumer Final Charge
+
+            - **113** - Consumer Final Charge'
         transaction_callback_url:
           type: string
           format: uri
@@ -8918,9 +10143,10 @@ components:
       - transaction_description
     PartnerConsumerPaymentRequestList:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         payment_request_status:
           type: string
@@ -8945,11 +10171,13 @@ components:
           description: Last Name of consumer
         transaction_description:
           type: integer
-          description: |-
-            The ID of the transaction type being sent:
+          description: 'The ID of the transaction type being sent:
+
             - **109** - Consumer Deposit/Initial Charge
+
             - **111** - Consumer Project Charge
-            - **113** - Consumer Final Charge
+
+            - **113** - Consumer Final Charge'
         consumer_charge_amount:
           type: string
           format: decimal
@@ -8999,9 +10227,10 @@ components:
       - transaction_description
     PartnerConsumerPaymentResponseSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         detail:
           $ref: '#/components/schemas/DetailSchema'
@@ -9009,9 +10238,10 @@ components:
       - detail
     PartnerConsumerPreOnboarding:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
@@ -9110,9 +10340,10 @@ components:
       - request_user_invitation_id
     PartnerConsumerSoftPull:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
@@ -9201,12 +10432,14 @@ components:
           - Other
           type: string
           x-spec-enum-id: 520a566bfc4ee4ee
-          description: |-
-            Acceptable values: "Rent", "Own", "Other".
+          description: 'Acceptable values: "Rent", "Own", "Other".
+
 
             * `Rent` - Rent
+
             * `Own` - Own
-            * `Other` - Other
+
+            * `Other` - Other'
         monthly_housing_payment:
           type: string
           format: decimal
@@ -9258,9 +10491,10 @@ components:
       - request_user_id
     PartnerConsumerSoftPullResponse:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         consumer_invitation_uuid:
           type: string
@@ -9298,9 +10532,10 @@ components:
       - soft_pull_credit_limit
     PartnerConsumerTransaction:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         consumer_application_human_readable_id:
           type: string
@@ -9316,12 +10551,15 @@ components:
           type: string
         transaction_description:
           type: integer
-          description: |-
-            The ID of the transaction type being sent:
+          description: 'The ID of the transaction type being sent:
+
             - **109** - Consumer Deposit/Initial Charge
+
             - **111** - Consumer Project Charge
+
             - **113** - Consumer Final Charge
-            - **115** - Consumer Refund Credit
+
+            - **115** - Consumer Refund Credit'
         consumer_charge_amount:
           type: string
           format: decimal
@@ -9334,17 +10572,26 @@ components:
           readOnly: true
         status:
           type: string
-          description: |-
-            Status of the transaction. A successful status means the transaction has successfully reached
+          description: 'Status of the transaction. A successful status means the transaction
+            has successfully reached
+
             our payment processor.
+
             Possible status:
+
             - Successful
+
             - Failed
+
             - Pending
+
             - Submitted
+
             - Reversed
+
             - Transferred
-            - Excluded
+
+            - Excluded'
         request_datetime:
           type: string
           format: date-time
@@ -9634,9 +10881,10 @@ components:
       - phone_number
     PartnerMerchantPaymentDetail:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         address_zip:
           type: string
@@ -9682,10 +10930,13 @@ components:
           maxItems: 2
         request_user_id:
           type: string
-          description: |-
-            External Partner user ID of an existing user set up at Momnt who is initiating
-            the change to the payment account. This user must be an active merchant admin user
-            for the merchant the update is being requested for.
+          description: 'External Partner user ID of an existing user set up at Momnt
+            who is initiating
+
+            the change to the payment account. This user must be an active merchant
+            admin user
+
+            for the merchant the update is being requested for.'
           maxLength: 255
         external_org_id:
           type: string
@@ -9711,9 +10962,10 @@ components:
       - artis_merchant_user_id
     PartnerMerchantPreOnboardingSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         first_name:
           type: string
@@ -9791,9 +11043,10 @@ components:
       - zip_code
     PartnerMerchantRateSheetList:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         merchant_fee:
           type: string
@@ -9814,89 +11067,115 @@ components:
           type: boolean
         top_left_title:
           type: string
-          description: |-
-            Header for the details in top_left_content.
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Deferred Interest:** 12 months
+          description: 'Header for the details in top_left_content.
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Deferred Interest:** 12 months'
           maxLength: 128
         top_left_content:
           type: string
-          description: |-
-            Product specific detail for the header in top_left_title
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Deferred Interest:** 12 months
+          description: 'Product specific detail for the header in top_left_title
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Deferred Interest:** 12 months'
           maxLength: 128
         top_center_title:
           type: string
-          description: |-
-            Header for the details in top_center_content
-            Ex: These fields would not be displayed in the example above. For an FR-0299-05 product, these 2 fields be
+          description: 'Header for the details in top_center_content
+
+            Ex: These fields would not be displayed in the example above. For an FR-0299-05
+            product, these 2 fields be
+
             displayed like so:
-            **Low APR:** 2.99%
+
+            **Low APR:** 2.99%'
           maxLength: 128
         top_center_content:
           type: string
-          description: |-
-            Product specific detail for the header in top_center_title
-            Ex: These fields would not be displayed in the example above. For an FR-0299-05 product, these 2 fields be
+          description: 'Product specific detail for the header in top_center_title
+
+            Ex: These fields would not be displayed in the example above. For an FR-0299-05
+            product, these 2 fields be
+
             displayed like so:
-            **Low APR:** 2.99%
+
+            **Low APR:** 2.99%'
           maxLength: 128
         top_right_title:
           type: string
-          description: |-
-            Header for the details in top_right_content
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **No Payments Due:** 12 months
+          description: 'Header for the details in top_right_content
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **No Payments Due:** 12 months'
           maxLength: 128
         top_right_content:
           type: string
-          description: |-
-            Product specific detail for the header in top_right_title
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **No Payments Due:** 12 months
+          description: 'Product specific detail for the header in top_right_title
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **No Payments Due:** 12 months'
           maxLength: 128
         mid_left_title:
           type: string
-          description: |-
-            Header for the details in mid_left_content
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Amortization Period:** 48 months
+          description: 'Header for the details in mid_left_content
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Amortization Period:** 48 months'
           maxLength: 128
         mid_left_content:
           type: string
-          description: |-
-            Product specific detail for the header in mid_left_title
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Amortization Period:** 48 months
+          description: 'Product specific detail for the header in mid_left_title
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Amortization Period:** 48 months'
           maxLength: 128
         mid_center_title:
           type: string
-          description: |-
-            Header for the details in mid_center_content
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Min APR:** 14.99%
+          description: 'Header for the details in mid_center_content
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Min APR:** 14.99%'
           maxLength: 128
         mid_center_content:
           type: string
-          description: |-
-            Product specific detail for the header in mid_center_title
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Min APR:** 14.99%
+          description: 'Product specific detail for the header in mid_center_title
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Min APR:** 14.99%'
           maxLength: 128
         mid_right_title:
           type: string
-          description: |-
-            Header for the details in mid_right_content
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Max APR:** 23.99%
+          description: 'Header for the details in mid_right_content
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Max APR:** 23.99%'
           maxLength: 128
         mid_right_content:
           type: string
-          description: |-
-            Product specific detail for the header in mid_right_title
-            Ex: The 2 fields would pair as shown below using the response example for the product above:
-            **Max APR:** 23.99%
+          description: 'Product specific detail for the header in mid_right_title
+
+            Ex: The 2 fields would pair as shown below using the response example
+            for the product above:
+
+            **Max APR:** 23.99%'
           maxLength: 128
         rate_sheet_merchant_product_price_id:
           type: integer
@@ -9909,14 +11188,19 @@ components:
           maxLength: 128
         product_category:
           type: string
-          description: |-
-            The product category that can be used to group products on the merchant's rate sheet. Available categories
+          description: 'The product category that can be used to group products on
+            the merchant''s rate sheet. Available categories
+
             include:
 
+
             - **Fixed Payment**
+
             - **Deferred Interest**
+
             - **Fixed Rate**
-            - **Zero Interest**
+
+            - **Zero Interest**'
           maxLength: 128
         product_type:
           type: string
@@ -9943,11 +11227,14 @@ components:
           type: array
           items:
             type: string
-          description: |-
-            Customer type(s) that would find this loan product appealing. Could include 1 or all of the below:
+          description: 'Customer type(s) that would find this loan product appealing.
+            Could include 1 or all of the below:
+
             - **promotion_motivated**
+
             - **interest_rate_sensitive**
-            - **payment_sensitive**
+
+            - **payment_sensitive**'
         max_credit_limit:
           type: integer
         payment_factor_low:
@@ -10014,9 +11301,10 @@ components:
       - rate_sheet_merchant_product_price_id
     PartnerMerchantRateSheetSelectList:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
@@ -10182,9 +11470,10 @@ components:
       - total_transaction_amount
     PartnerMerchantUserBatchCreate400ResponseSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         detail:
           type: string
@@ -10233,11 +11522,13 @@ components:
           - Salesmanager
           - Salesrep
           type: string
-          description: |-
-            * `Admin` - Admin
+          description: '* `Admin` - Admin
+
             * `Salesperson` - Salesperson
+
             * `Salesmanager` - Salesmanager
-            * `Salesrep` - Salesrep
+
+            * `Salesrep` - Salesrep'
           x-spec-enum-id: c42fccdaad47136b
           writeOnly: true
         user_id:
@@ -10252,9 +11543,10 @@ components:
       - user_type
     PartnerMerchantUserCreateRequestSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         first_name:
           type: string
@@ -10275,11 +11567,13 @@ components:
           - Salesmanager
           - Salesrep
           type: string
-          description: |-
-            * `Admin` - Admin
+          description: '* `Admin` - Admin
+
             * `Salesperson` - Salesperson
+
             * `Salesmanager` - Salesmanager
-            * `Salesrep` - Salesrep
+
+            * `Salesrep` - Salesrep'
           x-spec-enum-id: c42fccdaad47136b
           writeOnly: true
         user_id:
@@ -10356,9 +11650,10 @@ components:
       - user_type
     PartnerMerchantVerifyMicroDeposits:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         micro_deposit_amount_1:
           type: string
@@ -10378,9 +11673,10 @@ components:
       - micro_deposit_amount_2
     PartnerRefundConsumerPaymentRequestCreate:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
@@ -10470,27 +11766,45 @@ components:
           - destination.returned
           - destination.completed
           type: string
-          description: |-
-            * `queued` - queued
+          description: '* `queued` - queued
+
             * `pending` - pending
+
             * `completed` - completed
+
             * `canceled` - canceled
+
             * `failed` - failed
+
             * `reversed` - reversed
+
             * `source.initiated` - source.initiated
+
             * `source.confirmed` - source.confirmed
+
             * `source.failed` - source.failed
+
             * `source.completed` - source.completed
+
             * `source.canceled` - source.canceled
+
             * `source.originated` - source.originated
+
             * `source.corrected` - source.corrected
+
             * `source.returned` - source.returned
+
             * `source.settled` - source.settled
+
             * `destination.initiated` - destination.initiated
+
             * `destination.originated` - destination.originated
+
             * `destination.corrected` - destination.corrected
+
             * `destination.returned` - destination.returned
-            * `destination.completed` - destination.completed
+
+            * `destination.completed` - destination.completed'
           x-spec-enum-id: c08fbdda6f6bebfd
         source:
           $ref: '#/components/schemas/SourceDestination'
@@ -10546,15 +11860,18 @@ components:
       - transaction_description
     PartnerSettledTransactionResponseSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         is_settled:
           type: boolean
-          description: |-
-            If `settled` = `true`, then the funds from the transaction are in the destination account.
-            If `settled` = `false`, then the funds from the transaction are not in the destination account.
+          description: 'If `settled` = `true`, then the funds from the transaction
+            are in the destination account.
+
+            If `settled` = `false`, then the funds from the transaction are not in
+            the destination account.'
         payment_identifier:
           type: string
       required:
@@ -10562,9 +11879,10 @@ components:
       - payment_identifier
     PartnerSettledTransactionUpdate:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         payment_identifier:
           oneOf:
@@ -10585,12 +11903,15 @@ components:
           - Other
           - Collections Agency
           type: string
-          description: |-
-            * `Main/HQ` - Main/HQ
+          description: '* `Main/HQ` - Main/HQ
+
             * `Home` - Home
+
             * `Work` - Work
+
             * `Other` - Other
-            * `Collections Agency` - Collections Agency
+
+            * `Collections Agency` - Collections Agency'
           x-spec-enum-id: 4b3e23bbd4bee69a
         address_1:
           type: string
@@ -10630,73 +11951,73 @@ components:
     PatchedApprovedMerchantDetails:
       type: object
       properties:
-        sponsor:
+        display_name:
           type: string
+        can_update_display_name:
+          type: string
+          readOnly: true
+        merchant_facing_brand:
+          type: string
+        internal_id:
+          type: string
+        staged_funding_applied:
+          type: string
+          readOnly: true
         dba:
           type: string
           maxLength: 255
         note:
           type: string
-        hubspot_url:
+        sub_program:
           type: string
           readOnly: true
         can_update_risk_tier:
           type: string
           readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        can_update_display_name:
-          type: string
-          readOnly: true
-        staged_funding_applied:
-          type: string
-          readOnly: true
-        merchant_facing_brand:
-          type: string
-        rate_sheet:
-          type: string
-          readOnly: true
-        email:
-          type: string
-        human_readable_id:
-          type: string
-          maxLength: 10
         status:
           type: string
-        display_name:
-          type: string
-        address:
+        hubspot_url:
           type: string
           readOnly: true
-        sub_program:
+        sponsor:
           type: string
-          readOnly: true
         change_rate_sheet:
+          type: string
+          readOnly: true
+        phone:
+          type: string
+          readOnly: true
+        address:
           type: string
           readOnly: true
         can_update_status:
           type: string
           readOnly: true
-        consumer_facing_brand:
+        has_custom_staged_funding:
           type: string
-        risk_tier:
-          type: string
+          readOnly: true
         application_uuid:
           type: string
           readOnly: true
+        risk_tier:
+          type: string
+        consumer_facing_brand:
+          type: string
+        name:
+          type: string
+          maxLength: 255
         program:
-          type: string
-        phone:
-          type: string
-          readOnly: true
-        internal_id:
           type: string
         offer_codes:
           type: array
           items:
             $ref: '#/components/schemas/OfferCodes'
-        has_custom_staged_funding:
+        email:
+          type: string
+        human_readable_id:
+          type: string
+          maxLength: 10
+        rate_sheet:
           type: string
           readOnly: true
     PatchedCertificateOfCompletionConsumerSign:
@@ -10774,175 +12095,109 @@ components:
     PatchedConsumerAccount:
       type: object
       properties:
+        can_update_risk_status:
+          type: boolean
+          readOnly: true
+        payment_due_date:
+          type: string
+          format: date
+        transunion_ssn_last_four:
+          type: string
+        origination_date:
+          type: string
+          format: date
+        can_make_payment:
+          type: boolean
+          readOnly: true
+        first_billing_cycle_date:
+          type: string
+          readOnly: true
+        staged_funding_applied:
+          type: boolean
+          readOnly: true
+        preferred_language:
+          $ref: '#/components/schemas/PreferredLanguage'
         loan_number:
           type: string
           title: Application ID/Loan number
           maxLength: 28
-        current_amount_spent:
+        link_to_borrower_agreement_origination:
+          type: string
+          format: uri
+        note:
+          type: string
+        scra:
+          type: string
+          format: date-time
+          readOnly: true
+        current_principal_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        lender:
+          type: string
+        next_billing_date:
+          type: string
+          format: date
+        max_approved_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        deferred_finance_charge_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        is_active:
+          type: boolean
+          nullable: true
+        request_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        remaining_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        promo_end_date:
+          type: string
+          readOnly: true
+        designated_bank_account_payment_provider:
+          type: string
+          nullable: true
+          readOnly: true
+        dq_exclusion_reason:
+          type: boolean
+          readOnly: true
+        credit_limit:
           type: string
           format: decimal
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         make_payment:
           type: boolean
           readOnly: true
-        note:
-          type: string
-        origination_date:
-          type: string
-          format: date
-        purchase_window_end_date:
-          type: string
-          readOnly: true
-        dob:
-          type: string
-          format: date
-        transunion_ssn_last_four:
-          type: string
-        current_principal_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        fees_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        merchant:
-          $ref: '#/components/schemas/ConsumerMerchant'
-        remaining_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        late_fee_amount:
-          type: number
-          format: double
-          readOnly: true
-        property_address:
-          $ref: '#/components/schemas/ConsumerAddress'
-        bill_load_file_date:
-          type: string
-          format: date
-        total_pay_off_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        crb_stuck_loan:
-          type: boolean
-          description: Check if the loan is stuck in the CRB lender funding
-          readOnly: true
-        dq_status:
-          allOf:
-          - $ref: '#/components/schemas/DQStatus'
-          default: {}
-        product_details:
-          type: string
-        scra:
-          type: string
-          format: date-time
-          readOnly: true
-        user:
-          type: integer
-        update_ssn_last_four:
-          type: boolean
-          readOnly: true
-        can_update_risk_status:
-          type: boolean
-          readOnly: true
-        product_name:
-          type: string
-        can_make_payment:
-          type: boolean
-          readOnly: true
-        apr:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
-        next_billing_date:
-          type: string
-          format: date
-        risk_status:
-          type: string
-        deferred_finance_charge_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        account_status:
-          type: string
-        request_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        lender:
-          type: string
-        is_active:
-          type: boolean
-          nullable: true
-        edit_dq_exclusion_reason:
-          type: boolean
-          readOnly: true
-        payment_due_date:
-          type: string
-          format: date
-        staged_funding_applied:
-          type: boolean
-          readOnly: true
-        payment_due:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        update_address:
-          type: boolean
-          readOnly: true
-        consumer_name:
-          type: string
-        update_dob:
-          type: boolean
-          readOnly: true
-        can_update_credit_limit:
-          type: boolean
-          readOnly: true
-        promo_end_date:
-          type: string
-          readOnly: true
-        max_approved_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        collections_agency:
-          type: integer
-          nullable: true
-        first_billing_cycle_date:
-          type: string
-          readOnly: true
-        suppress_email_communication:
-          type: boolean
-        dq_exclusion_reason:
-          type: boolean
-          readOnly: true
-        link_to_borrower_agreement_origination:
-          type: string
-          format: uri
-        email:
-          type: string
-          format: email
-        merchant_phone_number:
-          type: string
-        ssn_last_four:
-          type: string
-          maxLength: 4
-          minLength: 4
         repay_link:
           type: string
           nullable: true
           readOnly: true
-        total_balance:
+        merchant:
+          $ref: '#/components/schemas/ConsumerMerchant'
+        update_dob:
+          type: boolean
+          readOnly: true
+        consumer_name:
+          type: string
+        current_amount_spent:
           type: string
           format: decimal
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        maturity_date:
+        dq_status:
+          allOf:
+          - $ref: '#/components/schemas/DQStatus'
+          default: {}
+        late_fees_balance:
           type: string
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/ConsumerAddress'
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         finance_charge_balance:
           type: string
           format: decimal
@@ -10950,50 +12205,116 @@ components:
         conversion_date:
           type: string
           readOnly: true
-        designated_bank_account_payment_provider:
-          type: string
-          nullable: true
-          readOnly: true
         servicing_account:
           type: string
-        total_amount_past_due:
+        address:
+          $ref: '#/components/schemas/ConsumerAddress'
+        fees_balance:
           type: string
           format: decimal
           pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
-        preferred_language:
-          $ref: '#/components/schemas/PreferredLanguage'
         first_payment_due_date:
           type: string
           readOnly: true
-        credit_limit:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        update_address:
+          type: boolean
+          readOnly: true
+        edit_dq_exclusion_reason:
+          type: boolean
+          readOnly: true
         next_payment_due_date:
           type: string
           readOnly: true
+        property_address:
+          $ref: '#/components/schemas/ConsumerAddress'
+        security_pin:
+          type: string
+          maxLength: 4
+        collections_agency:
+          type: integer
+          nullable: true
+        apr:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+        dob:
+          type: string
+          format: date
+        total_pay_off_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        risk_status:
+          type: string
+        user:
+          type: integer
         consumer_facing_brand:
           type: string
+        maturity_date:
+          type: string
+          readOnly: true
+        merchant_phone_number:
+          type: string
+        ssn_last_four:
+          type: string
+          maxLength: 4
+          minLength: 4
+        link_to_borrower_agreement_amortization:
+          type: string
+          format: uri
+        update_ssn_last_four:
+          type: boolean
+          readOnly: true
+        can_update_credit_limit:
+          type: boolean
+          readOnly: true
+        account_status:
+          type: string
+        crb_stuck_loan:
+          type: boolean
+          description: Check if the loan is stuck in the CRB lender funding
+          readOnly: true
+        product_details:
+          type: string
+        product_name:
+          type: string
+        suppress_email_communication:
+          type: boolean
         loss_mitigator:
           allOf:
           - $ref: '#/components/schemas/LossMitigator'
           readOnly: true
+        payment_due:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        email:
+          type: string
+          format: email
+        total_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+        purchase_window_end_date:
+          type: string
+          readOnly: true
+        loan_product_title:
+          type: string
+        late_fee_amount:
+          type: number
+          format: double
+          readOnly: true
+        total_amount_past_due:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
         payment_reversal_fee:
           type: number
           format: double
           readOnly: true
-        link_to_borrower_agreement_amortization:
+        bill_load_file_date:
           type: string
-          format: uri
-        loan_product_title:
-          type: string
-        security_pin:
-          type: string
-          maxLength: 4
-        late_fees_balance:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,30}(?:\.\d{0,2})?$
+          format: date
     PatchedConsumerAccountCreditLimit:
       type: object
       properties:
@@ -11005,13 +12326,17 @@ components:
           type: string
     PatchedConsumerBasicInfo:
       type: object
-      description: |-
-        Mixin to allow partial updates of model instances.
+      description: 'Mixin to allow partial updates of model instances.
+
         This mixin overrides the default `update` method to allow partial updates
+
         of model instances, which is useful when you want to update only a subset
+
         of fields without requiring all fields to be provided.
+
         When using this mixin, it should be the first parent class in order to ensure
-        that this `update` method is called.
+
+        that this `update` method is called.'
       properties:
         first_name:
           type: string
@@ -11186,16 +12511,19 @@ components:
           type: boolean
     PatchedExternalOfferCodeCreateSchema:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
           format: uuid
-          description: |-
-            External Partner user ID of an existing user set up at Momnt who creating the Offer Code.
-            This user must be an active merchant admin user for the Merchant used in the contractor_id path.
+          description: 'External Partner user ID of an existing user set up at Momnt
+            who creating the Offer Code.
+
+            This user must be an active merchant admin user for the Merchant used
+            in the contractor_id path.'
         name:
           type: string
           description: The name of the Offer Code. Alpha string between 2 and 80 characters.
@@ -11209,9 +12537,10 @@ components:
         rate_sheet_merchant_product_prices:
           type: array
           items: {}
-          description: |-
-            The value of the rate_sheet_merchant_product_price_id (found in the Merchant Rate Sheet Query)
-            of the products the Merchant wants to add to this rate sheet.
+          description: 'The value of the rate_sheet_merchant_product_price_id (found
+            in the Merchant Rate Sheet Query)
+
+            of the products the Merchant wants to add to this rate sheet.'
           maxItems: 7
           minItems: 2
     PatchedMerchant:
@@ -11509,11 +12838,13 @@ components:
           - Salesmanager
           - Salesrep
           type: string
-          description: |-
-            * `Admin` - Admin
+          description: '* `Admin` - Admin
+
             * `Salesperson` - Salesperson
+
             * `Salesmanager` - Salesmanager
-            * `Salesrep` - Salesrep
+
+            * `Salesrep` - Salesrep'
           x-spec-enum-id: c42fccdaad47136b
           writeOnly: true
     PatchedMerchantUsersAtThisLocationWrite:
@@ -11534,10 +12865,11 @@ components:
           - merchant-sales-rep
           - merchant-sales-manager
           type: string
-          description: |-
-            * `merchant-admin` - merchant-admin
+          description: '* `merchant-admin` - merchant-admin
+
             * `merchant-sales-rep` - merchant-sales-rep
-            * `merchant-sales-manager` - merchant-sales-manager
+
+            * `merchant-sales-manager` - merchant-sales-manager'
           x-spec-enum-id: 33122be08b53e11c
         locations:
           type: array
@@ -11548,9 +12880,9 @@ components:
           - Active
           - Inactive
           type: string
-          description: |-
-            * `Active` - Active
-            * `Inactive` - Inactive
+          description: '* `Active` - Active
+
+            * `Inactive` - Inactive'
           x-spec-enum-id: 2d9455dd451bbf4b
           default: Active
     PatchedOfferCodeWrite:
@@ -11571,9 +12903,10 @@ components:
             type: integer
     PatchedPartnerConsumerOfferUpdate:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
@@ -11586,9 +12919,10 @@ components:
           maxLength: 255
     PatchedPartnerMerchantRateSheetSelectList:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         request_user_id:
           type: string
@@ -11636,11 +12970,13 @@ components:
           - Salesmanager
           - Salesrep
           type: string
-          description: |-
-            * `Admin` - Admin
+          description: '* `Admin` - Admin
+
             * `Salesperson` - Salesperson
+
             * `Salesmanager` - Salesmanager
-            * `Salesrep` - Salesrep
+
+            * `Salesrep` - Salesrep'
           x-spec-enum-id: c42fccdaad47136b
           writeOnly: true
         external_org_ids:
@@ -11666,16 +13002,23 @@ components:
           - Employer
           - Collections Agency
           type: string
-          description: |-
-            * `Cell` - Cell
+          description: '* `Cell` - Cell
+
             * `Home` - Home
+
             * `Main` - Main
+
             * `Sales` - Sales
+
             * `Back Office` - Back Office
+
             * `Alternate` - Alternate
+
             * `Skiptrace` - Skiptrace
+
             * `Employer` - Employer
-            * `Collections Agency` - Collections Agency
+
+            * `Collections Agency` - Collections Agency'
           x-spec-enum-id: fa6343f5cb6acedc
         phone_number:
           type: string
@@ -11771,9 +13114,9 @@ components:
           - bank
           - card
           type: string
-          description: |-
-            * `bank` - bank
-            * `card` - card
+          description: '* `bank` - bank
+
+            * `card` - card'
           x-spec-enum-id: a542bc5ea6bba918
           writeOnly: true
     PatchedRiskStatusUpdate:
@@ -11977,9 +13320,9 @@ components:
           - paymentMethod.enabled
           - paymentMethod.disabled
           type: string
-          description: |-
-            * `paymentMethod.enabled` - paymentMethod.enabled
-            * `paymentMethod.disabled` - paymentMethod.disabled
+          description: '* `paymentMethod.enabled` - paymentMethod.enabled
+
+            * `paymentMethod.disabled` - paymentMethod.disabled'
           x-spec-enum-id: 7a5bcc8538725ff7
         data:
           $ref: '#/components/schemas/PaymentMethodsData'
@@ -12002,9 +13345,9 @@ components:
           - bank
           - card
           type: string
-          description: |-
-            * `bank` - bank
-            * `card` - card
+          description: '* `bank` - bank
+
+            * `card` - card'
           x-spec-enum-id: a542bc5ea6bba918
       required:
       - payment_provider_option_id
@@ -12034,16 +13377,23 @@ components:
           - Employer
           - Collections Agency
           type: string
-          description: |-
-            * `Cell` - Cell
+          description: '* `Cell` - Cell
+
             * `Home` - Home
+
             * `Main` - Main
+
             * `Sales` - Sales
+
             * `Back Office` - Back Office
+
             * `Alternate` - Alternate
+
             * `Skiptrace` - Skiptrace
+
             * `Employer` - Employer
-            * `Collections Agency` - Collections Agency
+
+            * `Collections Agency` - Collections Agency'
           x-spec-enum-id: fa6343f5cb6acedc
         phone_number:
           type: string
@@ -12154,17 +13504,27 @@ components:
       - name
     PortfolioSalesJobValidation:
       type: object
-      description: |-
-        A serializer for validation of loan agreement file.
-        - Each loan number should have exactly 10 digits
-        - Each loan number must not have dashes or leading/lagging spaces
-        - There is a "Loan Number" header as the first row
-        - Each loan number is newline separated
-        If the file format validation succeeds, return a list of all valid loan numbers in the file.
-        The user will be able to use this information to verify back to their original source file.
+      description: 'A serializer for validation of loan agreement file.
 
-        If the file format validation fails, return: all errors encountered, a list of valid loan numbers in the file,
-        and a list of invalid loan numbers in the file.
+        - Each loan number should have exactly 10 digits
+
+        - Each loan number must not have dashes or leading/lagging spaces
+
+        - There is a "Loan Number" header as the first row
+
+        - Each loan number is newline separated
+
+        If the file format validation succeeds, return a list of all valid loan numbers
+        in the file.
+
+        The user will be able to use this information to verify back to their original
+        source file.
+
+
+        If the file format validation fails, return: all errors encountered, a list
+        of valid loan numbers in the file,
+
+        and a list of invalid loan numbers in the file.'
       properties:
         loan_tape_file:
           type: string
@@ -12588,9 +13948,9 @@ components:
           - bank
           - card
           type: string
-          description: |-
-            * `bank` - bank
-            * `card` - card
+          description: '* `bank` - bank
+
+            * `card` - card'
           x-spec-enum-id: a542bc5ea6bba918
           writeOnly: true
       required:
@@ -12605,9 +13965,9 @@ components:
           - connected
           - disconnected
           type: string
-          description: |-
-            * `connected` - connected
-            * `disconnected` - disconnected
+          description: '* `connected` - connected
+
+            * `disconnected` - disconnected'
           x-spec-enum-id: fee37c729ffeff01
         number_of_active_loans:
           type: integer
@@ -12953,9 +14313,10 @@ components:
       - zip_code
     SoftPullOffer:
       type: object
-      description: |-
-        Applies help_text to serializer fields based on the inner `Schema` class.
-        Intended to be used ONLY for schema generation (drf-spectacular).
+      description: 'Applies help_text to serializer fields based on the inner `Schema`
+        class.
+
+        Intended to be used ONLY for schema generation (drf-spectacular).'
       properties:
         offer_uuid:
           type: string
@@ -13195,9 +14556,9 @@ components:
           - transfer.updated
           - transfer.created
           type: string
-          description: |-
-            * `transfer.updated` - transfer.updated
-            * `transfer.created` - transfer.created
+          description: '* `transfer.updated` - transfer.updated
+
+            * `transfer.created` - transfer.created'
           x-spec-enum-id: 880a2f833309db12
         data:
           $ref: '#/components/schemas/PartnerRefundRequest'
@@ -13578,9 +14939,9 @@ components:
           - sponsor
           - merchant
           type: string
-          description: |-
-            * `sponsor` - sponsor
-            * `merchant` - merchant
+          description: '* `sponsor` - sponsor
+
+            * `merchant` - merchant'
           x-spec-enum-id: ada7f00da01b2ed2
       required:
       - type
@@ -13590,12 +14951,15 @@ components:
       type: apiKey
       in: header
       name: HTTP_X-Signature
-      description: |-
-        Authentication via Moov Webhook Signature. Requires all headers:
+      description: 'Authentication via Moov Webhook Signature. Requires all headers:
+
         - `HTTP_X-Timestamp`
+
         - `HTTP_X-Nonce`
+
         - `HTTP_X-Webhook-Id`
-        - `HTTP_X-Signature`
+
+        - `HTTP_X-Signature`'
     basicAuth:
       type: http
       scheme: basic
