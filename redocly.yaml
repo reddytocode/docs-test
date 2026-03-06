@@ -7,9 +7,9 @@ apis:
 navbar:
   items:
     - label: Consumer API
-      page: /consumer/
+      page: /schema-v1/sponsorapi-_-consumer/sponsor_consumers_application_create/
     - label: Merchant API
-      page: /merchant/
+      page: /schema-v1/sponsorapi-_-merchant/merchants%20list/
     - label: Home
       page: /index
 
