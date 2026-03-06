@@ -6,14 +6,12 @@ apis:
 
 navbar:
   items:
-    - label: Home
-      page: /
     - label: Consumer API
       page: /consumer/
     - label: Merchant API
       page: /merchant/
-    - label: Guides
-      page: /guides/
+    - label: Home
+      page: /index
 
 footer:
   copyrightText: "Copyright 2026 Belle Financial. All rights reserved."
