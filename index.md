@@ -1,21 +1,33 @@
-## Getting Started
+---
+title: Getting Started
+description: Overview and quick start for the Belle Sponsor API
+---
 
-Base URLS:
-- Staging URL  `https://app-stg.momnt.com/`
-- Production URL  `https://app.momnt.com/`
-### Basic Authentication
+## Overview
 
-All requests to the Momnt Sponsor API must be authenticated using **HTTP Basic Authentication**.  
-You must include your **email (username)** and **API password** in the request using the `-u` flag or the `Authorization: Basic` header.
+The Belle Sponsor API lets you manage merchants, issue consumer loans, and integrate embedded lending into your platform.
 
-In Basic Authentication, the credentials are sent as `username:password` and encoded in Base64 by the client.
+**Base URLs:**
 
-Below is an example request using `curl`:
+| Environment | URL |
+|---|---|
+| Staging | `https://app-stg.momnt.com/` |
+| Production | `https://app.momnt.com/` |
+
+## Authentication
+
+All requests require **HTTP Basic Authentication** — your email (username) and API password.
 
 ```bash
 curl -s -X POST "https://app-stg.momnt.com/api/v1/sponsor/consumers/soft-pull/" \
   -H "Content-Type: application/json" \
-  -u "mail@test.com:pwd" \
+  -u "mail@test.com:your-api-password" \
   -d '{}'
-
 ```
+
+See [Authentication](authentication.md) for full details.
+
+## API Sections
+
+- **[Merchants](merchants/index.md)** — Onboard merchants, manage payment details, rate sheets, offer codes, and users.
+- **[Consumers](consumers/index.md)** — Invite consumers, run soft pulls, manage applications, transactions, and refunds.
